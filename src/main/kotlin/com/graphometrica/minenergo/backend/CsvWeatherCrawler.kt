@@ -33,6 +33,7 @@ class CsvWeatherCrawler(
         println("Done!!!!!")
     }
 
+    //@PostConstruct
     fun runthis() {
         startCrawler()
     }

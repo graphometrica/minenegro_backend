@@ -73,6 +73,7 @@ class MiddleTemperatureCounter(val weatherRawRepository: WeatherRawRepository,
         }
     }
 
+    //@PostConstruct
     fun runThis() {
         countMiddleTemp()
     }
