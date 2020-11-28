@@ -1,23 +1,23 @@
-package com.graphometrica.minenergo.backend
+package com.graphometrica.minenergo.backend.weather.service
 
+import com.graphometrica.minenergo.backend.weather.entity.WeatherRawEntity
+import com.graphometrica.minenergo.backend.weather.repository.WeatherRawRepository
 import com.opencsv.CSVReader
 import org.springframework.stereotype.Service
 import java.io.Reader
 import java.nio.file.Files
 import java.nio.file.Paths
-import java.sql.Timestamp
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import javax.annotation.PostConstruct
 
 
 @Service
-class CsvWeatherCrawler(
+class CsvWeatherCrawlerService(
         val weatherRawRepository: WeatherRawRepository
 ) {
 
-    val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
-    val fileNames = listOf("1","17","27","36","49","58","7","80","89","97","10","18","28","37","5","60","70","81","90","98","100","19","29","38","50","61","71","82","91","99","101","20","3","4","52","63","73","83","92","11","22","32","41","53","65","75","85","93","12","24","33","42","54","66","76","86","94","14","25","34","46","56","68","78","87","95","15","26","35","47","57","69","8","88","96")
+    val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")
+    val fileNames = listOf("1", "17", "27", "36", "49", "58", "7", "80", "89", "97", "10", "18", "28", "37", "5", "60", "70", "81", "90", "98", "100", "19", "29", "38", "50", "61", "71", "82", "91", "99", "101", "20", "3", "4", "52", "63", "73", "83", "92", "11", "22", "32", "41", "53", "65", "75", "85", "93", "12", "24", "33", "42", "54", "66", "76", "86", "94", "14", "25", "34", "46", "56", "68", "78", "87", "95", "15", "26", "35", "47", "57", "69", "8", "88", "96")
 
     fun startCrawler() {
         var counter = 0
@@ -38,7 +38,7 @@ class CsvWeatherCrawler(
         startCrawler()
     }
 
-    fun readAllExample(filename : String) {
+    fun readAllExample(filename: String) {
         val reader: Reader = Files.newBufferedReader(Paths.get(
                 ClassLoader.getSystemResource("csv/$filename").toURI()))
         readAll(reader, filename)
@@ -49,10 +49,10 @@ class CsvWeatherCrawler(
         csvReader.skip(7)
         val subjectIdFromFilename = filename.toInt()
         var row = csvReader.readNext()
-        var listOfRawWeather : List<WeatherRawEntity> = listOf()
-        var lastDouble : Double = (0).toDouble()
-        var lastTimeStamp : LocalDateTime = LocalDateTime.now()
-        var counter = 0;
+        var listOfRawWeather: List<WeatherRawEntity> = listOf()
+        var lastDouble: Double = (0).toDouble()
+        var lastTimeStamp: LocalDateTime = LocalDateTime.now()
+        var counter = 0
         while (row != null) {
             val splittedRow = row[0].split(';')
             val rawTimestamp = splittedRow[0].replace(Regex("""["]"""), "")
@@ -76,19 +76,19 @@ class CsvWeatherCrawler(
         weatherRawRepository.saveAll(listOfRawWeather)
     }
 
-    fun localDateTimeFromString(raw: String, errorValue : LocalDateTime): LocalDateTime {
+    fun localDateTimeFromString(raw: String, errorValue: LocalDateTime): LocalDateTime {
         return try {
             LocalDateTime.parse(raw, formatter)
-        } catch (ex : Exception) {
+        } catch (ex: Exception) {
             println("Error while read localdateime $raw, replaced with $errorValue")
             errorValue
         }
     }
 
-    fun stringToDouble(raw: String, errorValue : Double): Double {
+    fun stringToDouble(raw: String, errorValue: Double): Double {
         return try {
             raw.toDouble()
-        } catch (ex : Exception) {
+        } catch (ex: Exception) {
             println("Error while read temp $raw, replaced with $errorValue")
             errorValue
         }

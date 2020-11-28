@@ -1,7 +1,5 @@
-package com.graphometrica.minenergo.backend
+package com.graphometrica.minenergo.backend.weather.entity
 
-import java.sql.Timestamp
-import java.time.LocalDateTime
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
@@ -12,20 +10,20 @@ import javax.persistence.Id
 class RegionDirectoryEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id : Int = 0
+    var id: Int = 0
 
     @Column
-    var oes : String = ""
+    var oes: String = ""
 
     @Column
-    var name : String = ""
+    var name: String = ""
 
     @Column
-    var subjectId : Int = 0
+    var subjectId: Int = 0
 
     @Column
-    var powerSystemId : Int = 0
+    var powerSystemId: Int = 0
 
     @Column
-    var proName : String = ""
+    var proName: String = ""
 }

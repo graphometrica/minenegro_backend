@@ -1,6 +1,5 @@
-package com.graphometrica.minenergo.backend
+package com.graphometrica.minenergo.backend.weather.entity
 
-import java.sql.Timestamp
 import java.time.LocalDateTime
 import javax.persistence.Column
 import javax.persistence.Entity
@@ -12,14 +11,14 @@ import javax.persistence.Id
 class WeatherRawEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id : Int = 0
+    var id: Int = 0
 
     @Column
-    var subjectId : Int = 0
+    var subjectId: Int = 0
 
     @Column
-    var timestamp : LocalDateTime = LocalDateTime.now()
+    var timestamp: LocalDateTime = LocalDateTime.now()
 
     @Column
-    var temp : Double = (0).toDouble()
+    var temp: Double = (0).toDouble()
 }

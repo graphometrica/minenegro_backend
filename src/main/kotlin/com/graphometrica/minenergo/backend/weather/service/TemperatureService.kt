@@ -1,15 +1,19 @@
-package com.graphometrica.minenergo.backend
+package com.graphometrica.minenergo.backend.weather.service
 
+import com.graphometrica.minenergo.backend.weather.entity.WeatherHistoryEntity
+import com.graphometrica.minenergo.backend.weather.entity.WeatherRawEntity
+import com.graphometrica.minenergo.backend.weather.repository.RegionDirectoryRepository
+import com.graphometrica.minenergo.backend.weather.repository.WeatherHistoryRepository
+import com.graphometrica.minenergo.backend.weather.repository.WeatherRawRepository
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import javax.annotation.PostConstruct
 
 @Service
-class MiddleTemperatureCounter(val weatherRawRepository: WeatherRawRepository,
-                               val weatherHistoryRepository: WeatherHistoryRepository,
-                               val regionDirectoryRepository: RegionDirectoryRepository) {
-    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+class TemperatureService(val weatherRawRepository: WeatherRawRepository,
+                         val weatherHistoryRepository: WeatherHistoryRepository,
+                         val regionDirectoryRepository: RegionDirectoryRepository) {
+    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
 
     fun countMiddleTemp() {
         val allRegionsList = regionDirectoryRepository.findAll()
@@ -19,7 +23,7 @@ class MiddleTemperatureCounter(val weatherRawRepository: WeatherRawRepository,
 
         var weatherHistoryEntityList: List<WeatherHistoryEntity> = listOf()
 
-        var counter = 0;
+        var counter = 0
 
         allRegionsList.forEach { regionDirectoryItem ->
 
@@ -31,7 +35,7 @@ class MiddleTemperatureCounter(val weatherRawRepository: WeatherRawRepository,
 
             endDateTime = currentDateTime.plusYears(1L)
 
-            var lastTemperature : Double? = null
+            var lastTemperature: Double? = null
 
             while (currentDateTime.isBefore(endDateTime)) {
                 var listOfMomentWeather: List<WeatherRawEntity?> = listOf()
@@ -46,7 +50,7 @@ class MiddleTemperatureCounter(val weatherRawRepository: WeatherRawRepository,
 
                 var middleTemperature = sumOfTemperature / listOfMomentWeather.size
 
-                if (listOfMomentWeather.isEmpty() && lastTemperature!=null) {
+                if (listOfMomentWeather.isEmpty() && lastTemperature != null) {
                     middleTemperature = lastTemperature
                 }
 

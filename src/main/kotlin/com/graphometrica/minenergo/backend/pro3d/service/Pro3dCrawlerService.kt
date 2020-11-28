@@ -1,32 +1,27 @@
-package com.graphometrica.minenergo.backend
+package com.graphometrica.minenergo.backend.pro3d.service
 
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.graphometrica.minenergo.backend.pro.ProDataEntity
-import com.graphometrica.minenergo.backend.pro.ProDataRepository
+import com.graphometrica.minenergo.backend.ProModel
+import com.graphometrica.minenergo.backend.pro3d.entity.ProDataEntity
+import com.graphometrica.minenergo.backend.pro3d.repository.ProDataRepository
 import org.springframework.stereotype.Service
 import java.io.File
 import java.io.Reader
 import java.nio.file.Files
 import java.nio.file.Paths
-import java.time.LocalDate
 import java.time.LocalDateTime
-import java.time.YearMonth
 import java.time.format.DateTimeFormatter
-import java.time.format.DateTimeFormatterBuilder
-import java.time.temporal.ChronoField
-import java.util.*
-import javax.annotation.PostConstruct
 
 
 @Service
-class JsonProCrawler(
+class Pro3dCrawlerService(
         val proDataRepository: ProDataRepository
 ) {
 
-    val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+    val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")
 
-    val dataMap : Map<String, LocalDateTime> = mapOf(
+    val dataMap: Map<String, LocalDateTime> = mapOf(
             "2017, 1кв" to LocalDateTime.parse("01.01.2017 00:00", formatter),
             "2017, 2кв" to LocalDateTime.parse("01.04.2017 00:00", formatter),
             "2017, 3кв" to LocalDateTime.parse("01.07.2017 00:00", formatter),
@@ -51,8 +46,9 @@ class JsonProCrawler(
 
     fun readFile() {
         val paths = File("src/main/resources/pro_data").walk()
-        paths.forEach { if (it.isFile && !it.isHidden)
-            parseFile(it)
+        paths.forEach {
+            if (it.isFile && !it.isHidden)
+                parseFile(it)
         }
     }
 
@@ -62,7 +58,7 @@ class JsonProCrawler(
         proModel.lines.forEach { line ->
             line.points.forEach { point ->
                 proDataRepository.save(ProDataEntity().apply {
-                    timestamp = dataMap[point.x]?: LocalDateTime.now()
+                    timestamp = dataMap[point.x] ?: LocalDateTime.now()
                     value = point.y
                     powerSystemId = powerSystemIdDir
                     name = line.name
@@ -71,7 +67,7 @@ class JsonProCrawler(
         }
     }
 
-    fun readText(path : String) : String {
+    fun readText(path: String): String {
         val reader: Reader = Files.newBufferedReader(Paths.get(
                 ClassLoader.getSystemResource(path).toURI()))
         return reader.readText()
@@ -79,6 +75,6 @@ class JsonProCrawler(
 
     //@PostConstruct
     fun runThis() {
-        readFile();
+        readFile()
     }
 }
