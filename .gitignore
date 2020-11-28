@@ -1,0 +1,32 @@
+#Gradle
+.gradle/
+!gradle/wrapper/gradle-wrapper.jar
+
+#Code
+!**/src/main/**
+!**/src/test/**
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+out/
+
+#Build results
+target/
+classes/
+build/
+lib/
+
+#Debugging
+**/*.log*
+**/*.gz
+
+### VS Code ###
+.vscode/
+
+*.ignore
+
+#spring boot logback w/a
+loggingFile_IS_UNDEFINED

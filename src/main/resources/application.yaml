@@ -1,0 +1,40 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      leakDetectionThreshold: 6000
+    initialization-mode: always
+  flyway:
+    user: ${spring.datasource.username}
+    password: ${spring.datasource.password}
+    schemas: minenergo_schema
+    url: ${spring.datasource.url}
+    locations: 'classpath:/db/migration'
+    enabled: true
+    clean-on-validation-error: false
+  jpa:
+    show-sql: false
+  data:
+    rest:
+      base-path: /api/v1
+server:
+  port: 8095
+  servlet:
+    session:
+      cookie:
+        http-only: false
+---
+spring:
+  profiles: local
+  datasource:
+    username: ${SPRING_DATASOURCE_USERNAME:graph_user}
+    password: ${SPRING_DATASOURCE_PASSWORD:graph}
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/minenergo?currentSchema=minenergo_schema}
+---
+spring:
+  profiles: dev
+  datasource:
+    username: ${SPRING_DATASOURCE_USERNAME:}
+    password: ${SPRING_DATASOURCE_PASSWORD:}
+    url: ${SPRING_DATASOURCE_URL:}
+---
